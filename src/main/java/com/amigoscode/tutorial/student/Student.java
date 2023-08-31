@@ -14,7 +14,7 @@ public class Student {
     }
 
     // no ID constructor
-    public Student(String name, Integer age, LocalDate dateOfBirth, String email) {
+    public Student(String name, String email, LocalDate dateOfBirth, Integer age) {
         this.name = name;
         this.age = age;
         this.dateOfBirth = dateOfBirth;
@@ -22,7 +22,7 @@ public class Student {
     }
 
     // all fields constructor
-    public Student(Long id, String name, Integer age, LocalDate dateOfBirth, String email) {
+    public Student(Long id, String name, String email, LocalDate dateOfBirth, Integer age) {
         this.id = id;
         this.name = name;
         this.age = age;
