@@ -23,4 +23,8 @@ public class StudentService {
         // returns a list of all elements in the student database (repository)
         return studentRepository.findAll();
     }
+
+    public void addNewStudent(Student student) {
+        System.out.println(student);
+    }
 }

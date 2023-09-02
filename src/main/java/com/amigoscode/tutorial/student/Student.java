@@ -3,6 +3,7 @@ package com.amigoscode.tutorial.student;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Table
@@ -20,6 +21,7 @@ public class Student {
 
     private Long id;
     private String name;
+    @Transient // doesn't need to be a column in our database -> calculate age for us
     private Integer age;
     private LocalDate dateOfBirth;
     private String email;
@@ -29,18 +31,16 @@ public class Student {
     }
 
     // no ID constructor
-    public Student(String name, String email, LocalDate dateOfBirth, Integer age) {
+    public Student(String name, String email, LocalDate dateOfBirth) {
         this.name = name;
-        this.age = age;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
     }
 
     // all fields constructor
-    public Student(Long id, String name, String email, LocalDate dateOfBirth, Integer age) {
+    public Student(Long id, String name, String email, LocalDate dateOfBirth) {
         this.id = id;
         this.name = name;
-        this.age = age;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
     }
@@ -54,7 +54,7 @@ public class Student {
     }
 
     public Integer getAge() {
-        return age;
+        return Period.between(this.dateOfBirth, LocalDate.now()).getYears();
     }
 
     public LocalDate getDateOfBirth() {

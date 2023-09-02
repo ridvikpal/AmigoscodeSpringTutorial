@@ -1,9 +1,7 @@
 package com.amigoscode.tutorial.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +19,11 @@ public class StudentController {
     @GetMapping // for GET requests, return this from the server
     public List<Student> getStudents(){
         return studentService.getStudents();
+    }
+
+    @PostMapping // for POST requests, run this from the server
+    // Take the student from the URL request body
+    public void registernewStudent(@RequestBody Student student){
+        studentService.addNewStudent(student);
     }
 }
