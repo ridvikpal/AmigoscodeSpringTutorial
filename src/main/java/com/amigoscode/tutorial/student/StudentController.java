@@ -26,4 +26,19 @@ public class StudentController {
     public void registernewStudent(@RequestBody Student student){
         studentService.addNewStudent(student);
     }
+
+    @DeleteMapping(path = "{studentId}") // for DELETE requests, run this from the server
+    // delete the student based on the url (path) student id provided
+    public void deleteStudent(@PathVariable("studentId") Long studentId){
+        studentService.deleteStudent(studentId);
+    }
+
+    @PutMapping(path = "{studentId}") // for PUT requests, run this from the server
+    public void updateStudent(
+            @PathVariable("studentId") Long studentId,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email
+    ){
+        studentService.updateStudent(studentId, name, email);
+    }
 }

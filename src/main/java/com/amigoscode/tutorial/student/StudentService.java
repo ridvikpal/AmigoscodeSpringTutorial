@@ -1,12 +1,15 @@
 package com.amigoscode.tutorial.student;
 
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 // This is the service layer (AKA business layer)
 @Service // same as @component, but better for readability -> tells us it is a service class
@@ -25,6 +28,51 @@ public class StudentService {
     }
 
     public void addNewStudent(Student student) {
+        Optional<Student> studentOptional = studentRepository.findStudentByEmail(student.getEmail());
+
+        // if the email is present, throw an exception that the email has been taken
+        if (studentOptional.isPresent()){
+            throw new IllegalStateException("email taken");
+        }
+
+        // else the student is present, so save the student to the database
+        studentRepository.save(student);
         System.out.println(student);
+    }
+
+    public void deleteStudent(Long studentId) {
+        // check if a student exists by the given id in the database
+        boolean exists = studentRepository.existsById(studentId);
+        if (!exists){
+            throw new IllegalStateException("student with id " + studentId + " does not exist");
+        }
+        studentRepository.deleteById(studentId);
+    }
+
+    @Transactional
+    public void updateStudent(Long studentId, String name, String email) {
+        // get the student based on the id
+        Student student = studentRepository.findById(studentId).orElseThrow(
+                () -> new IllegalStateException("student with id " + studentId + " does not exist")
+        );
+
+        // change the name if:
+        // 1. name is not null or length 0
+        // 2. name is not the same as the old name
+        if (name != null && name.length() > 0 && !Objects.equals(student.getName(), name)){
+            student.setName(name);
+        }
+
+        // change the email if:
+        // 1. email is not null or length 0
+        // 2. email is not the same as the old email
+        if (email != null && email.length() > 0 && !Objects.equals(student.getEmail(), email)){
+            // also check if the email is not the same as another students'
+            Optional<Student> studentOptional = studentRepository.findStudentByEmail(email);
+            if (studentOptional.isPresent()){
+                throw new IllegalStateException("email taken");
+            }
+            student.setEmail(email);
+        }
     }
 }
